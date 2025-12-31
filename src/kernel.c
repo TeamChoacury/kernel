@@ -1,10 +1,11 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#include "multiboot.h"
+
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
 #define VGA_MEMORY 0xB8000
-
 
 size_t strlen(const char* str) {
     size_t len = 0;
@@ -36,7 +37,7 @@ void terminal_writestring(const char* data, size_t row, size_t col) {
     }
 }
 
-
+// multiboot_info_t* mbd, uint32_t magic
 void kernel_main(void) {
     terminal_initialize();
 
