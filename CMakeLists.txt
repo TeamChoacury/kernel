@@ -34,3 +34,8 @@ add_custom_target(iso ALL
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     COMMENT "Creating ISO"
 )
+
+# Configuration
+include(cmake/config.cmake)
+# Doxygen config
+include(cmake/docs.cmake)
