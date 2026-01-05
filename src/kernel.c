@@ -1,18 +1,13 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#include "memory/kmalloc.h"
+
 #include "multiboot.h"
 
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
 #define VGA_MEMORY 0xB8000
-
-size_t strlen(const char* str) {
-    size_t len = 0;
-    while (str[len])
-        len++;
-    return len;
-}
 
 void terminal_initialize(void) {
     volatile uint16_t* buffer = (volatile uint16_t*) VGA_MEMORY;
@@ -37,12 +32,18 @@ void terminal_writestring(const char* data, size_t row, size_t col) {
     }
 }
 
-// multiboot_info_t* mbd, uint32_t magic
-void kernel_main(void) {
+void kernel_main(multiboot_info_t* mbd, uint32_t magic) {
+    kmalloc_init();
+
     terminal_initialize();
 
     terminal_writestring("1234567890",0,0);
 
+    /// @bug Bootloader not providing multiboot information
+    if(magic != MULTIBOOT_BOOTLOADER_MAGIC) {
+        //terminal_writestring("Kernel Panic: Bootloader did not provide multiboot information", 0, 0);
+        //asm volatile("hlt");
+    }
     
     while (1) {}
 }

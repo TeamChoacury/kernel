@@ -11,6 +11,8 @@ cd "$BUILD_DIR"
 cmake ..
 cmake --build .
 
+# grub-mkrescue -o choacury-os.iso isodir/
+
 # Run
 qemu-system-x86_64 -cdrom choacury-os.iso
 

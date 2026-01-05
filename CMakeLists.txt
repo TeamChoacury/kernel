@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(Choacury C ASM)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffreestanding -O2 -mno-red-zone -fno-pie")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -ffreestanding -O2 -mno-red-zone -fno-pie -nostdlib")
 set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS}")
 
 set(CMAKE_C_LINK_EXECUTABLE "ld -n -T ${CMAKE_SOURCE_DIR}/src/linker.ld -o <TARGET> <OBJECTS>")
@@ -9,6 +9,8 @@ set(CMAKE_C_LINK_EXECUTABLE "ld -n -T ${CMAKE_SOURCE_DIR}/src/linker.ld -o <TARG
 add_executable(kernel.bin
     src/boot.s
     src/kernel.c
+    src/memory/kmalloc.c
+    src/drivers/utils/utils.c
 )
 
 set_target_properties(kernel.bin PROPERTIES LINK_FLAGS "")
