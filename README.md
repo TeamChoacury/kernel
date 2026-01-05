@@ -1,2 +1,2 @@
-# kernel
-ChoacuryOS V2 kernel
+# Choacury Kernel
+A reworked kernel for Choacury.
