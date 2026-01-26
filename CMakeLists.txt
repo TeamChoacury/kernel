@@ -6,12 +6,21 @@ set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS}")
 
 set(CMAKE_C_LINK_EXECUTABLE "ld -n -T ${CMAKE_SOURCE_DIR}/src/linker.ld -o <TARGET> <OBJECTS>")
 
+# Configuration
+include(cmake/config.cmake)
+
+if(KERNEL_BUILD)
 add_executable(kernel.bin
     src/boot.s
     src/kernel.c
     src/memory/kmalloc.c
+    src/memory/pmm.c
     src/drivers/utils/utils.c
+    src/panic.c
 )
+
+# Add src headers, so you should be able to include using #include <>
+target_include_directories(kernel.bin PRIVATE src)
 
 set_target_properties(kernel.bin PROPERTIES LINK_FLAGS "")
 
@@ -36,8 +45,7 @@ add_custom_target(iso ALL
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     COMMENT "Creating ISO"
 )
+endif()
 
-# Configuration
-include(cmake/config.cmake)
 # Doxygen config
 include(cmake/docs.cmake)

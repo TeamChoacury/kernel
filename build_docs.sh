@@ -8,7 +8,7 @@ mkdir -p "$BUILD_DIR"
 cd "$BUILD_DIR"
 
 # Configure and compile
-cmake .. -DKERNEL_BUILD_DOCS=OFF -DKERNEL_BUILD=ON
+cmake .. -DKERNEL_BUILD_DOCS=ON -DKERNEL_BUILD=OFF
 cmake --build .
 
 # grub-mkrescue -o choacury-os.iso isodir/

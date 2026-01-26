@@ -1,7 +1,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "memory/kmalloc.h"
+#include <memory/kmalloc.h>
+#include <memory/pmm.h>
 
 #include "multiboot.h"
 
@@ -34,6 +35,8 @@ void terminal_writestring(const char* data, size_t row, size_t col) {
 
 void kernel_main(multiboot_info_t* mbd, uint32_t magic) {
     kmalloc_init();
+    // This won't work at all until multiboot data is sorted out
+    //pmm_init(mbd);
 
     terminal_initialize();
 

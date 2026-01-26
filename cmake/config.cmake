@@ -5,3 +5,8 @@
 # Default:                      ON
 # Description:                  Compiles Doxygen documentation in ../kernel-docs
 option(KERNEL_BUILD_DOCS        "Build the Doxygen documentation"       ON )
+
+# KERNEL_BUILD
+# Default:                      ON
+# Description:                  Compiles the actual kernel
+option(KERNEL_BUILD             "Build the Kernel"                      ON )
