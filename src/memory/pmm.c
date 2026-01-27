@@ -3,7 +3,7 @@
 
 u64 g_total_pmm_bytes;
 
-void pmm_init(const multiboot_info_t* multiboot_info) {
+/*void pmm_init(const struct multiboot_info* multiboot_info) {
     if(!(multiboot_info->flags & MULTIBOOT_INFO_MEM_MAP)) {
         kpanic("Multiboot info does not include a memory map.\n");
     }
@@ -18,4 +18,4 @@ void pmm_init(const multiboot_info_t* multiboot_info) {
         }
         offset += entry->size + sizeof(entry->size);
     }
-}
+}*/

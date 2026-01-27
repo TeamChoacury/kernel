@@ -4,7 +4,8 @@
 #include <memory/kmalloc.h>
 #include <memory/pmm.h>
 
-#include "multiboot.h"
+#include "multiboot2.h"
+#include "mb2.h"
 
 #define VGA_WIDTH 80
 #define VGA_HEIGHT 25
@@ -33,19 +34,28 @@ void terminal_writestring(const char* data, size_t row, size_t col) {
     }
 }
 
-void kernel_main(multiboot_info_t* mbd, uint32_t magic) {
+void kernel_main(u64 address, u32 magic) {
     kmalloc_init();
     // This won't work at all until multiboot data is sorted out
     //pmm_init(mbd);
 
     terminal_initialize();
 
-    terminal_writestring("1234567890",0,0);
+    terminal_writestring("...",0,0);
 
     /// @bug Bootloader not providing multiboot information
-    if(magic != MULTIBOOT_BOOTLOADER_MAGIC) {
-        //terminal_writestring("Kernel Panic: Bootloader did not provide multiboot information", 0, 0);
-        //asm volatile("hlt");
+    if(magic != MULTIBOOT2_BOOTLOADER_MAGIC) {
+        terminal_writestring("Kernel Panic: Bootloader did not provide multiboot2 information", 0, 0);
+        asm volatile("hlt");
+    } else {
+        terminal_writestring("Bootloader provided multiboot2 information", 1, 0);
+    }
+
+    int mb2_init_success = multiboot2_init(address, magic);
+    if(mb2_init_success == 0) {
+        terminal_writestring("MB2 init successful", 2, 0);
+    } else {
+        terminal_writestring("MB2 init failed", 2, 0);
     }
     
     while (1) {}

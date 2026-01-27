@@ -9,14 +9,19 @@ set(CMAKE_C_LINK_EXECUTABLE "ld -n -T ${CMAKE_SOURCE_DIR}/src/linker.ld -o <TARG
 # Configuration
 include(cmake/config.cmake)
 
-if(KERNEL_BUILD)
-add_executable(kernel.bin
+set(
+    KERNEL_SOURCES
     src/boot.s
-    src/kernel.c
+    src/kernel/kernel.c
     src/memory/kmalloc.c
     src/memory/pmm.c
     src/drivers/utils/utils.c
     src/panic.c
+)
+
+if(KERNEL_BUILD)
+add_executable(kernel.bin
+    ${KERNEL_SOURCES}
 )
 
 # Add src headers, so you should be able to include using #include <>
@@ -30,18 +35,22 @@ add_custom_command(TARGET kernel.bin POST_BUILD
     COMMENT "Build complete"
 )
 
+add_executable(kernel.elf ${KERNEL_SOURCES})
+target_include_directories(kernel.elf PRIVATE src)
+set_target_properties(kernel.elf PROPERTIES LINK_FLAGS "-nostdlib max-page-size=0x1000")
+
 add_custom_target(iso ALL
     COMMAND mkdir -p isodir/boot/grub
-    COMMAND cp kernel.bin isodir/boot/kernel.bin
+    COMMAND cp kernel.elf isodir/boot/kernel.elf
     COMMAND echo 'set timeout=0' > isodir/boot/grub/grub.cfg
     COMMAND echo 'set default=0' >> isodir/boot/grub/grub.cfg
     COMMAND echo '' >> isodir/boot/grub/grub.cfg
     COMMAND echo 'menuentry "Choacury OS" {' >> isodir/boot/grub/grub.cfg
-    COMMAND echo '    multiboot2 /boot/kernel.bin' >> isodir/boot/grub/grub.cfg
+    COMMAND echo '    multiboot2 /boot/kernel.elf' >> isodir/boot/grub/grub.cfg
     COMMAND echo '    boot' >> isodir/boot/grub/grub.cfg
     COMMAND echo '}' >> isodir/boot/grub/grub.cfg
     COMMAND grub-mkrescue -o choacury-os.iso isodir
-    DEPENDS kernel.bin
+    DEPENDS kernel.elf
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     COMMENT "Creating ISO"
 )

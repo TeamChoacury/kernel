@@ -24,6 +24,11 @@ multiboot2_header_end:
 stack_bottom:
 .skip 16384
 stack_top:
+/* Multiboot information */
+mb_magic:
+    .quad 0
+mb_info:
+    .quad 0
 
 /* Page tables */
 .align 4096
@@ -38,10 +43,12 @@ pd:
 .align 16
 gdt64:
     .quad 0x0000000000000000    /* Null descriptor */
-    .quad 0x00AF9A000000FFFF    /* Code descriptor */
-    .quad 0x00AF92000000FFFF    /* Data descriptor */
+    .quad 0x00209A0000000000 /* .quad 0x002F9A000000FFFF */    /* Code descriptor */
+    .quad 0x0000920000000000 /* .quad 0x00AF92000000FFFF */    /* Data descriptor */
+gdt64_end:
+
 gdt64_pointer:
-    .word gdt64_pointer - gdt64 - 1
+    .word gdt64_end - gdt64 - 1
     .quad gdt64
 
 .section .text
@@ -49,8 +56,11 @@ gdt64_pointer:
 .global _start
 .type _start, @function
 _start:
+    /* Move multiboot info */
+    mov %eax, mb_magic
+    mov %ebx, mb_info
+
     mov $stack_top, %esp
-    
     
     /*Setup paging */
     call setup_page_tables
@@ -71,7 +81,7 @@ _start:
     
     /* Enable paging */
     mov %cr0, %eax
-    or $0x80000000, %eax
+    or $0x80000001, %eax
     mov %eax, %cr0
     
     lgdt gdt64_pointer
@@ -98,12 +108,19 @@ setup_page_tables:
 
 .code64
 long_mode:
+    lea stack_top(%rip), %rsp
+    and $~0xF, %rsp
+
     mov $0x10, %ax
     mov %ax, %ds
     mov %ax, %es
     mov %ax, %fs
     mov %ax, %gs
     mov %ax, %ss
+
+    /* Move multiboot info */
+    mov mb_info(%rip), %rdi
+    mov mb_magic(%rip), %rsi
     
     /* Call kernel */
     call kernel_main
