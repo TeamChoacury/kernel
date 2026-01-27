@@ -13,9 +13,10 @@ set(
     KERNEL_SOURCES
     src/boot.s
     src/kernel/kernel.c
+    src/kernel/mb2.c
     src/memory/kmalloc.c
     src/memory/pmm.c
-    src/drivers/utils/utils.c
+    src/utils/utils.c
     src/panic.c
 )
 

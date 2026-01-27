@@ -1,4 +1,7 @@
-#include <drivers/utils/types.h>
+#ifndef MB2_H
+#define MB2_H
+
+#include <utils/types.h>
 #include "multiboot2.h"
 
 /*
@@ -64,21 +67,6 @@ static char* multiboot2_tag_names[16] = {
 /// @param address The address from multiboot2
 /// @param magic The magic from multiboot2
 /// @return 0 on success, -1 on error
-int multiboot2_init(u64 address, u32 magic) {
-    int i;
+int multiboot2_init(u64 address, u32 magic);
 
-    struct multiboot2_tag_all* tag = (struct multiboot2_tag_all*)(address + 8);
-
-    if(magic != MULTIBOOT2_BOOTLOADER_MAGIC)
-        return -1;
-
-    u32 total_size = *(u32*)(address);
-    u64 end = address + total_size;
-
-    while((u64)tag < end && tag->tag.type != MULTIBOOT_TAG_TYPE_END) {
-
-        //tag = (struct multiboot2_tag_all*)ALIGN((u64)tag + tag->tag.size, MULTIBOOT_TAG_ALIGN);
-    }
-
-    return 0;
-}
+#endif

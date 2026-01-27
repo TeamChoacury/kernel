@@ -1,8 +1,8 @@
 #include <stddef.h>
 
-#include "kmalloc.h"
-#include "../drivers/utils/utils.h"
-#include "../drivers/utils/types.h"
+#include <memory/kmalloc.h>
+#include <utils/utils.h>
+#include <utils/types.h>
 
 #define KMALLOC_STATIC_SIZE 1024 * 1024
 

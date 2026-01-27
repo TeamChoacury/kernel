@@ -2,7 +2,7 @@
 #define PMM_H
 
 #include <kernel/multiboot2.h>
-#include <drivers/utils/types.h>
+#include <utils/types.h>
 
 extern u64 g_total_pmm_bytes;
 
