@@ -1,2 +1,2 @@
-# Choacury Redone Kernel
-A reworked kernel for Choacury called "Kitten".
+# Choacury V2 Kernel
+A rewrite of the Choacury Kernel
