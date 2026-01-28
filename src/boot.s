@@ -101,8 +101,10 @@ setup_page_tables:
     mov %eax, pdpt
     
     /* PD[0] -> 2MB page */
-    mov $0x83, %eax
-    mov %eax, pd
+    mov $0x000083, pd
+    mov $0x200083, pd+8
+    mov $0x400083, pd+16
+    mov $0x600083, pd+24
     
     ret
 

@@ -13,7 +13,7 @@ int multiboot2_init(u64 address, u32 magic) {
 
     while((u64)tag < end && tag->tag.type != MULTIBOOT_TAG_TYPE_END) {
 
-        //tag = (struct multiboot2_tag_all*)ALIGN((u64)tag + tag->tag.size, MULTIBOOT_TAG_ALIGN);
+        tag = (struct multiboot2_tag_all*)ALIGN((u64)tag + tag->tag.size, MULTIBOOT_TAG_ALIGN);
     }
 
     return 0;
